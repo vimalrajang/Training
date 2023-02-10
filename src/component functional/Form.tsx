@@ -1,26 +1,38 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DropdownInput from './DropdownInput'
 // import RadioInputs from './RadioInput'
 // import TextInput from './TextInput'
 import '../css/newForm.css'
 import SingleInput from './SingleInput'
+import { json } from 'stream/consumers'
+import { useNavigate } from 'react-router-dom'
 function Form() {
+
     const [successBox, setSuccessBox] = useState(true)
 
     const [formState, setFormState] = useState({ firstName: "", lastName: "", gender: "", country: "", languages: [] })
+    const [subButtonValid,setSubButtonValid] = useState(false)
+    useEffect(() => { 
+        if (formState.firstName === "" || formState.lastName === "" || formState.gender === "" || formState.country === "" || formState.languages.length === 0) {
+           setSubButtonValid(false)
+        }
+        else{
+            setSubButtonValid(true)
+        }
+     }, [formState])
+
+     const nav = useNavigate();
     const handleSubmit = () => {
-        if (formState.firstName === "" || formState.lastName === "" || formState.gender === "" || formState.country === ""||formState.languages.length === 0) {
-            alert("All fields are requied")
-        }
-        else {
             // console.log(formState,formState.languages.length)
-            setSuccessBox(false)
-        }
+            if(subButtonValid){
+                // setSuccessBox(false)
+
+                var str = JSON.stringify(formState)
+                nav("/success/"+str,{state:{formdata:str}})
+            }
+       
     }
-    const handleBack = () => {
-        setSuccessBox(true)
-        setFormState({ firstName: "", lastName: "", gender: "", country: "",  languages: [] })
-    }
+    
     const handleChange = (e: any, type: string) => {
         const { name, value } = e.target;
         setFormState(prevState => ({ ...prevState, [name]: value }))
@@ -41,7 +53,6 @@ function Form() {
     }
     return (
         <div>
-            {successBox ?
                 <div>
                     <div className='formGroup'>
                         <label htmlFor="firstName">First Name : </label>
@@ -64,32 +75,21 @@ function Form() {
                     <div className='formGroup'>
                         <DropdownInput value="country" countries={["India", "Other"]} handleChange={handleChange} />
                     </div>
-                    
+
                     <div className="formGroup">
                         <label htmlFor="">
                             Languages :
                         </label> <br />
+                        <br />
                         <SingleInput inputField="Languages" valueState="English" handleChange={handleCheckboxChange} stateName="languages" inputType="checkbox" /> <label htmlFor="languages">English</label> <br />
                         <SingleInput inputField="Languages" valueState="Tamil" handleChange={handleCheckboxChange} stateName="languages" inputType="checkbox" /> <label htmlFor="languages">Tamil</label> <br />
 
                     </div>
-                    <input type="submit" value="Submit" className='btn' onClick={handleSubmit} />
+                    <input type="submit" value="Submit" className='btn' disabled={!subButtonValid} onClick={handleSubmit} />
 
                     {/* <button className='btn' type='submit'   onClick={handleSubmit}>Submit</button> */}
-                </div> :
-                <span>
-                    <h1>
-                        Welcome {formState.firstName} {formState.lastName} !
-                    </h1>
-                    <p>gender : {formState.gender}</p>
-                    <p>Country : {formState.country}</p>
-                    <p>Languages : <br />
-                        {formState.languages.map((p) => <span>
-                            {p} <br />
-                        </span>)}</p>
-                    <button className='btn' onClick={handleBack}>Back</button>
-                </span>
-            }
+                </div> 
+              
 
         </div>
     )

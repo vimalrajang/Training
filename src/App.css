@@ -1,6 +1,7 @@
 .App {
   text-align: center;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -11,4 +12,15 @@
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+.link{
+  /* text-decoration: none; */
+  color: white;
+}
+.header{
+  display: flex;
+  flex-direction: column;
+}
+.btn-link{
+  text-decoration: none;
 }
