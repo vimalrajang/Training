@@ -9,11 +9,11 @@ function Form() {
 
     const [formState, setFormState] = useState({ firstName: "", lastName: "", gender: "", country: "", languages: [] })
     const handleSubmit = () => {
-        if (formState.firstName === "" || formState.lastName === "" || formState.gender === "" || formState.country === "" || formState.languages.length >0) {
+        if (formState.firstName === "" || formState.lastName === "" || formState.gender === "" || formState.country === ""||formState.languages.length === 0) {
             alert("All fields are requied")
         }
         else {
-            console.log(formState)
+            // console.log(formState,formState.languages.length)
             setSuccessBox(false)
         }
     }
